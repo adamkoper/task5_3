@@ -6,15 +6,16 @@ fake = Faker()
 
 
 class cards:
-   def __init__(self, name, company_name):
+   def __init__(self, name, company_name, mail):
        self.name = name
        self.company_name = company_name
+       self.mail = mail
+   def __str__(self):
+       return f'{self.name} {self.company_name} {self.mail}'
 
 
-bubu = cards(name=fake.name(), company_name=fake.company())
-for _ in range(10):
-    print(bubu.name, bubu.company_name)
-    
+bubu = cards(name=fake.name(), company_name=fake.company(), mail=fake.email())
+print(bubu)
 
 
 
