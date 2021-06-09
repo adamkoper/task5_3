@@ -11,7 +11,7 @@ class cards:
         self.job = job
 
     def __str__(self):
-        return f'{self.name} {self.last_name} {self.job} {self.company_name} {self.mail}'
+        return f'{self.name} {self.last_name} {self.mail}'
 
     def __repr__(self):
         return f"Cards(name={self.name} last_name={self.last_name}, job={self.job}, company_name={self.company_name}, mail={self.mail})"
@@ -20,32 +20,65 @@ class cards:
         return f'Kontaktuję się z {self.name} {self.last_name} {self.job} {self.mail}'
 
     @property
-    def name_lenght(self, name, last_name):
+    def label_lenght(self, name, last_name):
         return len(name)+1+len(last_name)
 
 
-card1 = cards(name=fake.unique.first_name(), last_name=fake.unique.last_name(), job=fake.job(),
-              company_name=fake.unique.company(), mail=fake.unique.email())
-card2 = cards(name=fake.unique.first_name(), last_name=fake.unique.last_name(), job=fake.job(),
-              company_name=fake.unique.company(), mail=fake.unique.email())
-card3 = cards(name=fake.unique.first_name(), last_name=fake.unique.last_name(), job=fake.job(),
-              company_name=fake.unique.company(), mail=fake.unique.email())
-card4 = cards(name=fake.unique.first_name(), last_name=fake.unique.last_name(), job=fake.job(),
-              company_name=fake.unique.company(), mail=fake.unique.email())
-card5 = cards(name=fake.unique.first_name(), last_name=fake.unique.last_name(), job=fake.job(),
-              company_name=fake.unique.company(), mail=fake.unique.email())
+class BaseContact(cards):
+    def __init__(self, phone, name, last_name, mail):
+        self.name = name
+        self.last_name = last_name
+        self.mail = mail
+        self.phone = phone
 
-cards_list = [card1, card2, card3, card4, card5]
+    def contact(self):
+        return f'Wybieram numer {self.phone} i dzwonię do {self.name} {self.last_name}'
 
-by_name = sorted(cards_list, key=lambda cards: cards.name)
-by_last_name = sorted(cards_list, key=lambda cards: cards.last_name)
-by_email = sorted(cards_list, key=lambda cards: cards.mail)
 
-print(card1)
-print(by_name)
-print(by_last_name)
-print(by_email)
-print(cards.contact(card1))
+class BusinessContact(cards):
+    def __init__(self, work_phone, work_mail, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.work_phone = work_phone
+        self.work_mail = work_mail
+
+    def contact(self):
+        return f'Wybieram numer {self.work_phone} i dzwonię do {self.name} {self.last_name}'
+
+
+
+def create_contacts(card_type, qnt = int()):
+    base_card = [BaseContact(name = fake.first_name(),
+                  last_name = fake.last_name(),
+                  phone = fake.phone_number(),
+                  mail = fake.ascii_email())
+                  for i in range(qnt)]
+    biz_card = [BusinessContact(name = fake.first_name(),
+                  last_name = fake.last_name(),
+                  mail = fake.ascii_email(),
+                  company_name = fake.company(),
+                  job = fake.job(),
+                  work_phone = fake.phone_number(),
+                  work_mail = fake.ascii_email())
+                  for i in range(qnt)]
+
+    if card_type == 'podstawowe':
+        for card in base_card:
+            print(card)
+    elif card_type == 'biznesowe':
+        for card in biz_card:
+            print(card)
+
+create_contacts(input('Wpisz "podstawowe" lub "biznesowe"'), int(input('Podaj liczbę osób do wygenerowania:')))
+
+
+
+
+
+
+
+
+
+
 
 
 
