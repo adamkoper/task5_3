@@ -19,3 +19,9 @@ cars = [car_one, car_two, car_three]
 by_speed = sorted(cars, key=lambda car: car.top_speed)
 by_make = sorted(cars, key=lambda car: car.make)
 print(cars)
+
+from faker import Faker
+fake = Faker()
+
+for x in range(10):
+    print(fake.name())
